@@ -2,8 +2,9 @@
 import { buildFooterText, getWidgetConfig } from "../runtime/config.mjs";
 
 const config = getWidgetConfig();
-const className = Astro.props.class ?? config.footer.class;
-const style = Astro.props.style ?? config.footer.style;
+const mode = Astro.props.styleMode ?? config.styling?.mode ?? "class";
+const className = mode === "none" ? Astro.props.class : Astro.props.class ?? config.footer.class;
+const style = mode === "inline" ? Astro.props.style ?? config.footer.style : Astro.props.style;
 const text = buildFooterText(config, Astro.props);
 ---
 

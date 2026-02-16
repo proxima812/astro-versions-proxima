@@ -1,16 +1,14 @@
 # astro-versions-proxima
 
-Astro integration for site version UI: header badge + footer text.
+Astro integration for a site version UI: header badge + footer text.
 
-## EN
-
-### Install
+## Install
 
 ```bash
 bun add astro-versions-proxima
 ```
 
-### Setup (`astro.config.mjs`)
+## Setup (`astro.config.mjs`)
 
 ```js
 import { defineConfig } from "astro/config";
@@ -19,35 +17,34 @@ import versionsProxima from "astro-versions-proxima";
 export default defineConfig({
   integrations: [
     versionsProxima({
-      versionStrategy: "manual",
-      version: "2.4.3",
-      builtAt: "2026-02-15T19:19:00.000Z",
+      versionStrategy: "package", // "manual" | "package" | "timestamp"
+      styling: {
+        mode: "class", // "class" (default) | "inline" | "none"
+      },
       time: {
-        utcOffset: 5,
-        locale: "ru-RU",
+        utcOffset: 0,
+        locale: "en-US",
       },
       header: {
         prefix: "v",
         class: "site-version-badge",
-        style:
-          "display:inline-flex;padding:4px 10px;border-radius:999px;background:#111;color:#fff;font-size:12px;font-weight:600;",
       },
       footer: {
         label: "Site version:",
         separator: "•",
         class: "site-version-footer",
-        style: "font-size:14px;opacity:.85;",
       },
     }),
   ],
 });
 ```
 
-### Components
+## Components
 
 ```astro
 ---
-import { VHeaderBadge, VFooterText } from "astro-versions-proxima";
+import VHeaderBadge from "astro-versions-proxima/components/VHeaderBadge";
+import VFooterText from "astro-versions-proxima/components/VFooterText";
 ---
 
 <header>
@@ -60,68 +57,45 @@ import { VHeaderBadge, VFooterText } from "astro-versions-proxima";
 ```
 
 Direct imports:
-
 - `astro-versions-proxima/components/VHeaderBadge`
 - `astro-versions-proxima/components/VFooterText`
 
-### Example output
+## Styling Modes
 
-- Header: `v2.4.3`
-- Footer: `Site version: 2.4.3 • Feb 16, 2026 - 00:19 (UTC+5)`
+`styling.mode` supports 3 modes:
 
-### Version strategies
+- `"class"` (default): default class names are applied, no default inline styles.
+- `"inline"`: default inline styles are applied.
+- `"none"`: no default class names and no default inline styles.
 
-- `manual`: use `version` from integration options
-- `package`: read from `package.json` (`version` field)
-- `timestamp`: auto version in UTC format `YYYY.MM.DD-HHmm`
-- `resolveVersion(context)`: fully custom logic
+Default class names:
+- Header: `avp-header-badge`
+- Footer: `avp-footer-text`
 
-### Git push version bump (script-based)
+## Version Strategies
 
-If you want the version to change when pushing to Git, use `versionStrategy: "package"` and bump `package.json` before `git push`.
+- `manual`: use `version` from options.
+- `package`: read `version` from `package.json`.
+- `timestamp`: auto-generate from build time in `YYYY.MM.DD-HHmm` (UTC).
+- `resolveVersion(context)`: custom function override.
 
-`package.json` example:
+## Template Tokens
 
-```json
-{
-  "scripts": {
-    "version:bump": "bun version patch --no-git-tag-version",
-    "push:versioned": "bun run version:bump && git add package.json && git commit -m \"chore: bump version\" && git push"
-  }
-}
-```
-
-Then push with:
-
-```bash
-bun run push:versioned
-```
-
-Alternative CI flow (recommended for teams): on push to `main`, run a workflow that bumps `package.json` and pushes back a `chore: bump version` commit.
-
-### Template tokens
-
-Header template:
-
+Header template tokens:
 - `{prefix}`
 - `{version}`
 
-Footer template:
-
+Footer template tokens:
 - `{label}`
 - `{version}`
 - `{separator}`
 - `{datetime}`
 
-## RU
+## Copy-Paste Ready Recipes
 
-### Установка
+### 1) Plain CSS (recommended starter)
 
-```bash
-bun add astro-versions-proxima
-```
-
-### Подключение (`astro.config.mjs`)
+`astro.config.mjs`
 
 ```js
 import { defineConfig } from "astro/config";
@@ -132,97 +106,95 @@ export default defineConfig({
     versionsProxima({
       versionStrategy: "manual",
       version: "2.4.3",
-      builtAt: "2026-02-15T19:19:00.000Z",
-      time: {
-        utcOffset: 5,
-        locale: "ru-RU",
-      },
-      header: {
-        prefix: "v",
-      },
-      footer: {
-        label: "Версия сайта:",
-        separator: "•",
-      },
+      styling: { mode: "class" },
+      header: { class: "site-version-badge" },
+      footer: { class: "site-version-footer", label: "Site version:" },
     }),
   ],
 });
 ```
 
-### Компоненты
+`src/styles/global.css`
 
-```astro
----
-import { VHeaderBadge, VFooterText } from "astro-versions-proxima";
----
+```css
+.site-version-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+}
 
-<header>
-  <VHeaderBadge />
-</header>
-
-<footer>
-  <VFooterText />
-</footer>
-```
-
-### Пример вывода
-
-- Header: `v2.4.3`
-- Footer: `Версия сайта: 2.4.3 • 16 февр. 2026 - 00:19 (UTC+5)`
-
-### Стратегии версии
-
-- `manual`: вручную из `version`
-- `package`: из `package.json` (`version`)
-- `timestamp`: автоматически из времени сборки (`YYYY.MM.DD-HHmm`)
-- `resolveVersion(context)`: кастомная функция
-
-### Изменение версии при пуше в Git (через скрипт)
-
-Чтобы версия обновлялась при пуше, используй `versionStrategy: "package"` и увеличивай версию в `package.json` перед `git push`.
-
-Пример `package.json`:
-
-```json
-{
-  "scripts": {
-    "version:bump": "bun version patch --no-git-tag-version",
-    "push:versioned": "bun run version:bump && git add package.json && git commit -m \"chore: bump version\" && git push"
-  }
+.site-version-footer {
+  font-size: 0.875rem;
+  opacity: 0.8;
 }
 ```
 
-Пуш:
+`src/pages/index.astro`
 
-```bash
-bun run push:versioned
+```astro
+---
+import VHeaderBadge from "astro-versions-proxima/components/VHeaderBadge";
+import VFooterText from "astro-versions-proxima/components/VFooterText";
+---
+
+<VHeaderBadge />
+<VFooterText />
 ```
 
-Для команды/проекта удобнее CI-сценарий: workflow на пуш в `main`, который делает bump версии и коммитит `chore: bump version` обратно в репозиторий.
+### 2) Tailwind (ready to paste)
 
-### Токены шаблонов
-
-Header:
-
-- `{prefix}`
-- `{version}`
-
-Footer:
-
-- `{label}`
-- `{version}`
-- `{separator}`
-- `{datetime}`
-
-## ES
-
-### Instalacion
+1. Add Tailwind:
 
 ```bash
-bun add astro-versions-proxima
+bunx astro add tailwind --yes
 ```
 
-### Configuracion (`astro.config.mjs`)
+2. Use this config and component usage:
+
+`astro.config.mjs`
+
+```js
+import { defineConfig } from "astro/config";
+import versionsProxima from "astro-versions-proxima";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  integrations: [
+    versionsProxima({
+      versionStrategy: "package",
+      styling: { mode: "class" },
+    }),
+  ],
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+
+`src/pages/index.astro`
+
+```astro
+---
+import VHeaderBadge from "astro-versions-proxima/components/VHeaderBadge";
+import VFooterText from "astro-versions-proxima/components/VFooterText";
+---
+
+<VHeaderBadge class="inline-flex items-center gap-1 rounded-full bg-zinc-900 px-2.5 py-1 text-xs font-semibold text-white" />
+<VFooterText class="mt-2 text-sm text-zinc-600" />
+```
+
+### 3) Fully custom markup styles (`mode: "none"`)
+
+If you want to control everything manually:
+
+`astro.config.mjs`
 
 ```js
 import { defineConfig } from "astro/config";
@@ -232,85 +204,27 @@ export default defineConfig({
   integrations: [
     versionsProxima({
       versionStrategy: "manual",
-      version: "2.4.3",
-      builtAt: "2026-02-15T19:19:00.000Z",
-      time: {
-        utcOffset: 5,
-        locale: "es-ES",
-      },
-      header: {
-        prefix: "v",
-      },
-      footer: {
-        label: "Version del sitio:",
-        separator: "•",
-      },
+      version: "9.9.9",
+      styling: { mode: "none" },
     }),
   ],
 });
 ```
 
-### Componentes
+`src/pages/index.astro`
 
 ```astro
 ---
-import { VHeaderBadge, VFooterText } from "astro-versions-proxima";
+import VHeaderBadge from "astro-versions-proxima/components/VHeaderBadge";
+import VFooterText from "astro-versions-proxima/components/VFooterText";
 ---
 
-<header>
-  <VHeaderBadge />
-</header>
-
-<footer>
-  <VFooterText />
-</footer>
+<VHeaderBadge class="my-own-badge" />
+<VFooterText class="my-own-footer" />
 ```
 
-### Ejemplo de salida
-
-- Header: `v2.4.3`
-- Footer: `Version del sitio: 2.4.3 • 16 feb 2026 - 00:19 (UTC+5)`
-
-### Estrategias de version
-
-- `manual`: usar `version` manual
-- `package`: leer `version` desde `package.json`
-- `timestamp`: version automatica por build (`YYYY.MM.DD-HHmm`)
-- `resolveVersion(context)`: logica personalizada
-
-### Cambio de version al hacer push (con script)
-
-Para cambiar la version en cada push, usa `versionStrategy: "package"` y aumenta la version de `package.json` antes de `git push`.
-
-Ejemplo en `package.json`:
-
-```json
-{
-  "scripts": {
-    "version:bump": "bun version patch --no-git-tag-version",
-    "push:versioned": "bun run version:bump && git add package.json && git commit -m \"chore: bump version\" && git push"
-  }
-}
-```
-
-Luego:
+## Build Check
 
 ```bash
-bun run push:versioned
+bun run build
 ```
-
-Alternativa recomendada para equipos: workflow de CI en push a `main` que actualiza `package.json` y crea commit `chore: bump version`.
-
-### Tokens de plantilla
-
-Header:
-
-- `{prefix}`
-- `{version}`
-
-Footer:
-
-- `{label}`
-- `{version}`
-- `{separator}`
-- `{datetime}`

@@ -1,6 +1,6 @@
 {
   "name": "astro-versions-proxima",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Astro integration with configurable site version badge and footer text.",
   "type": "module",
   "license": "MIT",

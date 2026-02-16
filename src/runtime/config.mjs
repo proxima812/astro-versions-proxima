@@ -3,6 +3,9 @@ import { formatUtcDateTime } from "./format.mjs";
 export const DEFAULT_WIDGET_CONFIG = {
   version: "0.0.0",
   builtAt: new Date().toISOString(),
+  styling: {
+    mode: "class",
+  },
   header: {
     class: "avp-header-badge",
     style:
@@ -59,6 +62,7 @@ export function getWidgetConfig() {
     ...injected,
     header: mergeObjects(DEFAULT_WIDGET_CONFIG.header, injected.header),
     footer: mergeObjects(DEFAULT_WIDGET_CONFIG.footer, injected.footer),
+    styling: mergeObjects(DEFAULT_WIDGET_CONFIG.styling, injected.styling),
     time: mergeObjects(DEFAULT_WIDGET_CONFIG.time, injected.time),
   };
 }

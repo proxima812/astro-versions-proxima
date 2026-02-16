@@ -100,6 +100,7 @@ function buildWidgetConfig(options = {}, rootPath) {
     builtAt: builtAt.toISOString(),
     header: mergeOptions(DEFAULT_WIDGET_CONFIG.header, options.header),
     footer: mergeOptions(DEFAULT_WIDGET_CONFIG.footer, options.footer),
+    styling: mergeOptions(DEFAULT_WIDGET_CONFIG.styling, options.styling),
     time: mergeOptions(DEFAULT_WIDGET_CONFIG.time, options.time),
   };
 
