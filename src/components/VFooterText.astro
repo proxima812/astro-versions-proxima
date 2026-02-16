@@ -1,0 +1,10 @@
+---
+import { buildFooterText, getWidgetConfig } from "../runtime/config.mjs";
+
+const config = getWidgetConfig();
+const className = Astro.props.class ?? config.footer.class;
+const style = Astro.props.style ?? config.footer.style;
+const text = buildFooterText(config, Astro.props);
+---
+
+<p class={className} style={style}>{text}</p>

@@ -1,0 +1,36 @@
+{
+  "name": "astro-versions-proxima",
+  "version": "0.1.0",
+  "description": "Astro integration with configurable site version badge and footer text.",
+  "type": "module",
+  "license": "MIT",
+  "main": "./src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./components/VHeaderBadge": "./src/components/VHeaderBadge.astro",
+    "./components/VFooterText": "./src/components/VFooterText.astro"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node --check src/index.mjs && node --check src/integration/index.mjs && node --check src/runtime/config.mjs && node --check src/runtime/format.mjs",
+    "pack:check": "npm pack --dry-run",
+    "prepublishOnly": "bun run build"
+  },
+  "keywords": [
+    "astro",
+    "astro-integration",
+    "version",
+    "badge",
+    "footer"
+  ],
+  "peerDependencies": {
+    "astro": "^5.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

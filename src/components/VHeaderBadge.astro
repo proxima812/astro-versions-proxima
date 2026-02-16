@@ -1,0 +1,10 @@
+---
+import { buildHeaderText, getWidgetConfig } from "../runtime/config.mjs";
+
+const config = getWidgetConfig();
+const className = Astro.props.class ?? config.header.class;
+const style = Astro.props.style ?? config.header.style;
+const text = buildHeaderText(config, Astro.props);
+---
+
+<span class={className} style={style}>{text}</span>
