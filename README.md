@@ -1,6 +1,6 @@
 # astro-versions-proxima
 
-**A lightweight Astro integration for displaying site version information** with customizable header badge and footer text components.
+**A lightweight Astro integration for displaying site version information** with a customizable version badge component.
 
 Perfect for tracking deployment versions, build dates, and build metadata across your Astro site.
 
@@ -69,30 +69,47 @@ export default defineConfig({
 
 ## Usage
 
-### Import Components
+### Import the Component
 
-Use the components in your `.astro` files:
+Use `BadgeVersion` in your `.astro` files. The `variant` prop selects between header and footer modes (defaults to `"header"`):
 
 ```astro
 ---
-import VHeaderBadge from "@proxima812/astro-versions-proxima/components/VHeaderBadge";
-import VFooterText from "@proxima812/astro-versions-proxima/components/VFooterText";
+import BadgeVersion from "@proxima812/astro-versions-proxima/components/BadgeVersion";
 ---
 
 <header>
-  <VHeaderBadge />
+  <BadgeVersion />
 </header>
 
 <footer>
-  <VFooterText />
+  <BadgeVersion variant="footer" />
 </footer>
 ```
 
-### Import Paths
+### Import Path
 
-- **Integration**: `@proxima812/astro-versions-proxima` (from package root)
-- **Header component**: `@proxima812/astro-versions-proxima/components/VHeaderBadge`
-- **Footer component**: `@proxima812/astro-versions-proxima/components/VFooterText`
+- **Integration**: `@proxima812/astro-versions-proxima`
+- **Component**: `@proxima812/astro-versions-proxima/components/BadgeVersion`
+
+---
+
+## Component Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"header" \| "footer"` | `"header"` | Selects which config section and text builder to use |
+| `class` | `string` | — | CSS class name (overrides default when `styleMode="class"`) |
+| `style` | `string` | — | Inline styles (applied when `styleMode="inline"`) |
+| `styleMode` | `"class" \| "inline" \| "none"` | — | Override styling mode for this instance |
+| `version` | `string` | — | Override the resolved version string |
+| `prefix` | `string` | — | Header: override the version prefix |
+| `template` | `string` | — | Override the text template |
+| `label` | `string` | — | Footer: override the label text |
+| `separator` | `string` | — | Footer: override the separator |
+| `utcOffset` | `number` | — | Footer: UTC offset for datetime display |
+| `locale` | `string` | — | Footer: locale for date/time formatting |
+| `includeUtcLabel` | `boolean` | `true` | Footer: append UTC offset label |
 
 ---
 
@@ -127,11 +144,11 @@ Choose how your version is determined:
 
 Customize the text output using these tokens:
 
-**Header:**
+**Header (`variant="header"`):**
 - `{prefix}` — prefix text (default: "v")
 - `{version}` — resolved version string
 
-**Footer:**
+**Footer (`variant="footer"`):**
 - `{label}` — label text (default: "Site version:")
 - `{version}` — resolved version string
 - `{separator}` — separator character (default: "•")
@@ -190,12 +207,11 @@ export default defineConfig({
 
 ```astro
 ---
-import VHeaderBadge from "@proxima812/astro-versions-proxima/components/VHeaderBadge";
-import VFooterText from "@proxima812/astro-versions-proxima/components/VFooterText";
+import BadgeVersion from "@proxima812/astro-versions-proxima/components/BadgeVersion";
 ---
 
-<VHeaderBadge />
-<VFooterText />
+<BadgeVersion />
+<BadgeVersion variant="footer" />
 ```
 
 ### 2. Tailwind CSS
@@ -232,12 +248,11 @@ export default defineConfig({
 
 ```astro
 ---
-import VHeaderBadge from "@proxima812/astro-versions-proxima/components/VHeaderBadge";
-import VFooterText from "@proxima812/astro-versions-proxima/components/VFooterText";
+import BadgeVersion from "@proxima812/astro-versions-proxima/components/BadgeVersion";
 ---
 
-<VHeaderBadge class="inline-flex items-center gap-1 rounded-full bg-zinc-900 px-2.5 py-1 text-xs font-semibold text-white" />
-<VFooterText class="mt-2 text-sm text-zinc-600" />
+<BadgeVersion class="inline-flex items-center gap-1 rounded-full bg-zinc-900 px-2.5 py-1 text-xs font-semibold text-white" />
+<BadgeVersion variant="footer" class="mt-2 text-sm text-zinc-600" />
 ```
 
 ### 3. Fully Custom (No Default Styles)
@@ -265,12 +280,11 @@ export default defineConfig({
 
 ```astro
 ---
-import VHeaderBadge from "@proxima812/astro-versions-proxima/components/VHeaderBadge";
-import VFooterText from "@proxima812/astro-versions-proxima/components/VFooterText";
+import BadgeVersion from "@proxima812/astro-versions-proxima/components/BadgeVersion";
 ---
 
-<VHeaderBadge class="my-custom-badge" />
-<VFooterText class="my-custom-footer" />
+<BadgeVersion />
+<BadgeVersion variant="footer" />
 ```
 
 ---
@@ -283,134 +297,3 @@ Compile TypeScript and validate types:
 bun run build     # Compile to dist/
 bun run typecheck # Type-check only (no output)
 ```
-
-### 1) Plain CSS (recommended starter)
-
-`astro.config.mjs`
-
-```js
-import { defineConfig } from "astro/config";
-import versionsProxima from "@proxima812/astro-versions-proxima";
-
-export default defineConfig({
-  integrations: [
-    versionsProxima({
-      versionStrategy: "manual",
-      version: "2.4.3",
-      styling: { mode: "class" },
-      header: { class: "site-version-badge" },
-      footer: { class: "site-version-footer", label: "Site version:" },
-    }),
-  ],
-});
-```
-
-`src/styles/global.css`
-
-```css
-.site-version-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  background: #111;
-  color: #fff;
-  font-size: 0.78rem;
-  font-weight: 600;
-  line-height: 1;
-}
-
-.site-version-footer {
-  font-size: 0.875rem;
-  opacity: 0.8;
-}
-```
-
-`src/pages/index.astro`
-
-```astro
----
-import VHeaderBadge from "@proxima812/astro-versions-proxima/components/VHeaderBadge";
-import VFooterText from "@proxima812/astro-versions-proxima/components/VFooterText";
----
-
-<VHeaderBadge />
-<VFooterText />
-```
-
-### 2) Tailwind (ready to paste)
-
-1. Add Tailwind:
-
-```bash
-bunx astro add tailwind --yes
-```
-
-2. Use this config and component usage:
-
-`astro.config.mjs`
-
-```js
-import { defineConfig } from "astro/config";
-import versionsProxima from "@proxima812/astro-versions-proxima";
-import tailwindcss from "@tailwindcss/vite";
-
-export default defineConfig({
-  integrations: [
-    versionsProxima({
-      versionStrategy: "package",
-      styling: { mode: "class" },
-    }),
-  ],
-  vite: {
-    plugins: [tailwindcss()],
-  },
-});
-```
-
-`src/pages/index.astro`
-
-```astro
----
-import VHeaderBadge from "@proxima812/astro-versions-proxima/components/VHeaderBadge";
-import VFooterText from "@proxima812/astro-versions-proxima/components/VFooterText";
----
-
-<VHeaderBadge class="inline-flex items-center gap-1 rounded-full bg-zinc-900 px-2.5 py-1 text-xs font-semibold text-white" />
-<VFooterText class="mt-2 text-sm text-zinc-600" />
-```
-
-### 3) Fully custom markup styles (`mode: "none"`)
-
-If you want to control everything manually:
-
-`astro.config.mjs`
-
-```js
-import { defineConfig } from "astro/config";
-import versionsProxima from "@proxima812/astro-versions-proxima";
-
-export default defineConfig({
-  integrations: [
-    versionsProxima({
-      versionStrategy: "manual",
-      version: "9.9.9",
-      styling: { mode: "none" },
-    }),
-  ],
-});
-```
-
-`src/pages/index.astro`
-
-```astro
----
-import VHeaderBadge from "@proxima812/astro-versions-proxima/components/VHeaderBadge";
-import VFooterText from "@proxima812/astro-versions-proxima/components/VFooterText";
----
-
-<VHeaderBadge class="my-own-badge" />
-<VFooterText class="my-own-footer" />
-```
-
