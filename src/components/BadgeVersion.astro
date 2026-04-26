@@ -37,4 +37,8 @@ const text =
     : buildHeaderText(config, { version, prefix, template, header });
 ---
 
-<span class={className} style={style} {...rest}>{text}</span>
+{variant === "footer" ? (
+  <p class={className} style={style} {...rest}>{text}</p>
+) : (
+  <span class={className} style={style} {...rest}>{text}</span>
+)}

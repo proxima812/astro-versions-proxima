@@ -67,14 +67,12 @@ export function formatUtcDateTime(
   const shifted = new Date(date.getTime() + offset * 60 * 60 * 1000);
 
   const dateFormatter = new Intl.DateTimeFormat(locale, {
-    ...DEFAULT_DATE_OPTIONS,
-    ...(dateOptions || {}),
+    ...dateOptions,
     timeZone: "UTC",
   });
 
   const timeFormatter = new Intl.DateTimeFormat(locale, {
-    ...DEFAULT_TIME_OPTIONS,
-    ...(timeOptions || {}),
+    ...timeOptions,
     timeZone: "UTC",
   });
 

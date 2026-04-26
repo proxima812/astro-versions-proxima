@@ -1,5 +1,3 @@
-import type { AstroIntegration } from "astro";
-
 export type VersionStrategy = "manual" | "package" | "timestamp";
 export type StylingMode = "class" | "inline" | "none";
 
@@ -58,5 +56,3 @@ export interface WidgetConfig {
   time: TimeOptions;
 }
 
-export declare function versionsProxima(options?: VersionsProximaOptions): AstroIntegration;
-export declare const astroVersionsProxima: typeof versionsProxima;
