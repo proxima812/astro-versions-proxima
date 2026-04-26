@@ -47,13 +47,11 @@ function formatUtcDateTime(input, options = {}) {
   const date = toDate(input);
   const shifted = new Date(date.getTime() + offset * 60 * 60 * 1e3);
   const dateFormatter = new Intl.DateTimeFormat(locale, {
-    ...DEFAULT_DATE_OPTIONS,
-    ...dateOptions || {},
+    ...dateOptions,
     timeZone: "UTC"
   });
   const timeFormatter = new Intl.DateTimeFormat(locale, {
-    ...DEFAULT_TIME_OPTIONS,
-    ...timeOptions || {},
+    ...timeOptions,
     timeZone: "UTC"
   });
   const datePart = dateFormatter.format(shifted);

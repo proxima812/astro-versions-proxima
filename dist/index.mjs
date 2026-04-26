@@ -110,8 +110,6 @@ function buildWidgetConfig(options, rootPath) {
     options
   });
   return {
-    ...DEFAULT_WIDGET_CONFIG,
-    ...options,
     version: resolvedVersion,
     builtAt: builtAt.toISOString(),
     header: mergeOptions(DEFAULT_WIDGET_CONFIG.header, options.header),
