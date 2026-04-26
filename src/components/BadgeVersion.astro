@@ -1,0 +1,40 @@
+---
+import { buildHeaderText, buildFooterText, getWidgetConfig } from "../../dist/runtime/config.mjs";
+
+const {
+  class: classProp,
+  style: styleProp,
+  styleMode,
+  variant = "header",
+  version,
+  prefix,
+  template,
+  label,
+  separator,
+  builtAt,
+  datetime,
+  utcOffset,
+  locale,
+  dateOptions,
+  timeOptions,
+  dateTimeSeparator,
+  includeUtcLabel,
+  header,
+  footer,
+  time,
+  ...rest
+} = Astro.props;
+
+const config = getWidgetConfig();
+const mode = styleMode ?? config.styling?.mode ?? "class";
+const section = variant === "footer" ? config.footer : config.header;
+const className = mode === "none" ? classProp : classProp ?? section.class;
+const style = mode === "inline" ? styleProp ?? section.style : styleProp;
+
+const text =
+  variant === "footer"
+    ? buildFooterText(config, { version, label, separator, builtAt, datetime, template, utcOffset, locale, dateOptions, timeOptions, dateTimeSeparator, includeUtcLabel, footer, time })
+    : buildHeaderText(config, { version, prefix, template, header });
+---
+
+<span class={className} style={style} {...rest}>{text}</span>

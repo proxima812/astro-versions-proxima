@@ -1,23 +1,43 @@
 {
-  "name": "astro-versions-proxima",
-  "version": "0.1.1",
+  "name": "@proxima812/astro-versions-proxima",
+  "version": "2.0.0",
   "description": "Astro integration with configurable site version badge and footer text.",
   "type": "module",
   "license": "MIT",
-  "main": "./src/index.mjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/proxima812/astro-versions-proxima.git"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "components/BadgeVersion": [
+        "./src/components/BadgeVersion.d.ts"
+      ]
+    }
+  },
   "exports": {
-    ".": "./src/index.mjs",
-    "./components/VHeaderBadge": "./src/components/VHeaderBadge.astro",
-    "./components/VFooterText": "./src/components/VFooterText.astro"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    },
+    "./components/BadgeVersion": {
+      "types": "./src/components/BadgeVersion.d.ts",
+      "default": "./src/components/BadgeVersion.astro"
+    }
   },
   "files": [
-    "src",
+    "src/components",
+    "dist",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "node --check src/index.mjs && node --check src/integration/index.mjs && node --check src/runtime/config.mjs && node --check src/runtime/format.mjs",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
     "pack:check": "npm pack --dry-run",
+    "publish:npm": "npm publish --access public --registry=https://registry.npmjs.org",
     "prepublishOnly": "bun run build"
   },
   "keywords": [
@@ -30,7 +50,12 @@
   "peerDependencies": {
     "astro": "^5.0.0"
   },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }
