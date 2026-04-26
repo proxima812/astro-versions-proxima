@@ -44,7 +44,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Bump patch version
-        run: npm version patch -m "chore: release v%s [skip ci]"
+        run: |
+          npm version patch -m "chore: release v%s [skip ci]"
 
       - name: Push version bump and tag
         run: |
@@ -52,6 +53,6 @@ jobs:
           git push --tags
 
       - name: Publish to npm
-        run: npm publish --access public
+        run: bun publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
